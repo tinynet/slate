@@ -19,58 +19,73 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API!!!! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the Hoxell API! 
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+Hoxell API allows to access and modify hotel resources.
 
-This example API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
-# My section
-This is my section
-## My subsection 1
-here
-> what the fuck is this
-## My subsection 2
-here here
+Hoxell API follows very closely the concepts outlined in STRIPE API <a href="https://stripe.com/docs/api/">https://stripe.com/docs/api/</a> and the REST model. 
 
-# Authentication
+* URL Endpoints based on resources
+* Request bodies: form encoded
+* Response: JSON encoded
+* HTTP: response code, authentication and verbs
 
-> To authorize, use this code:
+API is accessible only through https
 
-```ruby
-require 'kittn'
+## Authentication
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
+Hoxell API use API keys to authenticate requests via HTTP Basic Auth.
 
-```python
-import kittn
+Each hotel has its own API key. The API key identify the account. Authorization is managed with JWT
+<a href="https://stormpath.com/blog/token-auth-spa">https://stormpath.com/blog/token-auth-spa</a>
 
-api = kittn.authorize('meowmeowmeow')
-```
 
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
+## Errors
 
-```javascript
-const kittn = require('kittn');
+Failure of API requests is indicated by standard HTTP response code:
 
-let api = kittn.authorize('meowmeowmeow');
-```
+* 2xx: OK
+* 4xx: request error from client side
+* 5xx: server errors
 
-> Make sure to replace `meowmeowmeow` with your API key.
+An additional description is contained in the response:
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+```{error:"Error message"}```
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
-`Authorization: meowmeowmeow`
+## Object Expansion
 
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
+Related objects in the response object can be expanded with the ``expand```request parameter.
+See: <a href="https://stripe.com/docs/api/expanding_objects">https://stripe.com/docs/api/expanding_objects</a>
+
+## Idempotent Requests
+
+POST requests accept an ```Idempotency-Key``` parameter.
+The idempotency key is generate client side and it is an unique value.
+
+Requests can be safely retried with the same idempotency key.
+
+## Pagination
+
+Top level resources support "list" methods.
+
+All list methods return a list objects with a common structure and accept three parameters: ```limit```,  ```starting_after``` and ```ending_before```. Default dates for both are "forever" in the past and in the future.
+Dates are applied on relevant object date field.
+
+### Parameters
+
+* limit: optional. Limit on the number of objects. Default is no limit
+* starting_after: optional. Starting date, inclusive. Format = YYYY-MM-DD
+* ending_before: optional. Ending date, inclusive. Format = YYYY-MM-DD
+
+### List Response Format
+
+* object: string, value: "list"
+* data: array. An array containing response objects.
+* has_more: boolean. True if there are more elements. False if is the end of the list.
+* url: the URL for accessing this list
+
+
 
 # Kittens
 

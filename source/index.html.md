@@ -85,11 +85,44 @@ Dates are applied on relevant object date field.
 * has_more: boolean. True if there are more elements. False if is the end of the list.
 * url: the URL for accessing this list
 
+## Versioning
+
+Forward compatible changes (E.g. New resources, optional parameters)  don't produce a new API version. 
+API version used depends on API key.
+
+# CORE OBJECTS
+
+These objects are typically used by all modules.
+
+## Domain objects
+
+Core objects beloging to the domain.
+
+### Guest
+
+### Reservation
+
+### Room
+
+### Staff
+
+## Application objects
+
+Application objects are general system objects
+
+### Department
+
+### Menu
+
+### Privilege
+
+### Property
+
+### Role
 
 
-# Kittens
 
-## Get All Kittens
+
 
 ```ruby
 require 'kittn'
